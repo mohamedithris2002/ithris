@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html ng-app="todoApp">
+<head>
+    <title>To-Do List Application</title>
+    <style>
+        /* To-do list styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .todo-container {
+            width: 300px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            margin-top: 0;
+        }
+        .todo-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+        .todo-item button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .todo-item button:hover {
+            background-color: #c82333;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        /* Animation for adding and removing tasks */
+        .todo-item.ng-enter {
+            animation: slideIn 0.5s ease;
+        }
+        .todo-item.ng-leave {
+            animation: slideOut 0.5s ease;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="TodoListController as todoCtrl" class="todo-container">
+        <h1>To-Do List Application</h1>
+        <input type="text" ng-model="todoCtrl.newTask" placeholder="Add a new task">
+        <button ng-click="todoCtrl.addTask()">Add Task</button>
+        <div class="todo-list">
+            <div class="todo-item" ng-repeat="task in todoCtrl.tasks" ng-animate="'todo-item'" ng-class="{ 'ng-enter': 'fadeIn', 'ng-leave': 'fadeOut' }">
+                <span>{{ task }}</span>
+                <button ng-click="todoCtrl.removeTask($index)">X</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('todoApp', [])
+        .controller('TodoListController', function() {
+            var vm = this;
+
+            vm.tasks = [];
+
+            vm.addTask = function() {
+                if (vm.newTask.trim() !== '') {
+                    vm.tasks.push(vm.newTask);
+                    vm.newTask = ''; // Clear input field after adding task
+                }
+            };
+
+            vm.removeTask = function(index) {
+                vm.tasks.splice(index, 1);
+            };
+        });
+    </script>
+</body>
+</html>
