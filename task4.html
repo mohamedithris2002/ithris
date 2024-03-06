@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="calendarApp">
+<head>
+    <title>Responsive Event Calendar</title>
+    <style>
+        /* Calendar styling */
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 10px;
+        }
+        .day {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .event {
+            background-color: #007bff;
+            color: #fff;
+            padding: 2px 5px;
+            margin-bottom: 2px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        /* Responsive styling */
+        @media screen and (max-width: 768px) {
+            .calendar {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="CalendarController as calendarCtrl">
+        <h1>Responsive Event Calendar</h1>
+        <div class="calendar">
+            <div class="day" ng-repeat="day in calendarCtrl.days">
+                <h2>{{ day.name }}</h2>
+                <div class="events">
+                    <span class="event" ng-repeat="event in day.events">{{ event.name }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('calendarApp', [])
+        .controller('CalendarController', function() {
+            var vm = this;
+
+            // Define days of the week and their events
+            vm.days = [
+                { name: 'Sunday', events: [{ name: 'Event 1' }, { name: 'Event 2' }] },
+                { name: 'Monday', events: [] },
+                { name: 'Tuesday', events: [{ name: 'Event 3' }] },
+                { name: 'Wednesday', events: [] },
+                { name: 'Thursday', events: [{ name: 'Event 4' }] },
+                { name: 'Friday', events: [] },
+                { name: 'Saturday', events: [{ name: 'Event 5' }] }
+            ];
+        });
+    </script>
+</body>
+</html>
