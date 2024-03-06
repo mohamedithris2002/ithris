@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="analyticsApp">
+<head>
+    <title>Dashboard Analytics Page</title>
+    <style>
+        /* Dashboard styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-top: 0;
+        }
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 20px;
+        }
+        .chart {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="AnalyticsController as analyticsCtrl" class="container">
+        <h1>Dashboard Analytics Page</h1>
+        <div class="charts-container">
+            <div class="chart">
+                <h2>Chart 1</h2>
+                <!-- Chart 1 content goes here -->
+            </div>
+            <div class="chart">
+                <h2>Chart 2</h2>
+                <!-- Chart 2 content goes here -->
+            </div>
+            <div class="chart">
+                <h2>Chart 3</h2>
+                <!-- Chart 3 content goes here -->
+            </div>
+            <!-- Add more charts as needed -->
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('analyticsApp', [])
+        .controller('AnalyticsController', function() {
+            // Controller logic goes here
+        });
+    </script>
+</body>
+</html>
