@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="weatherApp">
+<head>
+    <title>Real-Time Weather Application</title>
+    <style>
+        /* Styles for weather app */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 0;
+        }
+        .weather-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="WeatherController as weatherCtrl" class="container">
+        <h1>Real-Time Weather Application</h1>
+        <div class="weather-info">
+            <p>{{ weatherCtrl.weatherData.name }}, {{ weatherCtrl.weatherData.sys.country }}</p>
+            <p>{{ weatherCtrl.weatherData.weather[0].description }}</p>
+            <p>Temperature: {{ weatherCtrl.weatherData.main.temp }}°C</p>
+            <p>Humidity: {{ weatherCtrl.weatherData.main.humidity }}%</p>
+            <p>Wind Speed: {{ weatherCtrl.weatherData.wind.speed }} m/s</p>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('weatherApp', [])
+        .controller('WeatherController', function($http) {
+            var vm = this;
+            var API_KEY = 'YOUR_API_KEY'; // Replace with your actual API key
+            var API_URL = 'https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=' + API_KEY;
+
+            vm.weatherData = {};
+
+            // Fetch weather data from API
+            $http.get(API_URL)
+                .then(function(response) {
+                    vm.weatherData = response.data;
+                })
+                .catch(function(error) {
+                    console.error('Error fetching weather data:', error);
+                });
+        });
+    </script>
+</body>
+</html>
