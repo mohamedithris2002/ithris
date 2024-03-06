@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html ng-app="chatApp">
+<head>
+    <title>Real-Time Chat Application</title>
+    <style>
+        /* Chat application styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-top: 0;
+        }
+        .chat-box {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message.from-me {
+            text-align: right;
+        }
+        .message.from-me .sender {
+            display: none;
+        }
+        .message.from-other {
+            text-align: left;
+        }
+        .message.from-other .sender {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .input-box {
+            display: flex;
+        }
+        .input-box input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .input-box input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .input-box input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="ChatController as chatCtrl" class="container">
+        <h1>Real-Time Chat Application</h1>
+        <div class="chat-box" id="chatBox">
+            <div class="message from-other" ng-repeat="message in chatCtrl.messages">
+                <span class="sender">{{ message.sender }}:</span> {{ message.text }}
+            </div>
+        </div>
+        <form ng-submit="chatCtrl.sendMessage()" class="input-box">
+            <input type="text" ng-model="chatCtrl.newMessage" placeholder="Type your message here...">
+            <input type="submit" value="Send">
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+    <script>
+        angular.module('chatApp', [])
+        .controller('ChatController', function() {
+            var vm = this;
+
+            vm.messages = [];
+            vm.newMessage = '';
+
+            // Dummy sender name (replace with actual user authentication)
+            var sender = 'User';
+
+            // Connect to the socket server
+            var socket = io();
+
+            // Receive messages from the server
+            socket.on('chat message', function(data) {
+                vm.messages.push(data);
+                scrollChatToBottom();
+            });
+
+            vm.sendMessage = function() {
+                if (vm.newMessage.trim() !== '') {
+                    var message = {
+                        sender: sender,
+                        text: vm.newMessage
+                    };
+                    socket.emit('chat message', message);
+                    vm.messages.push(message);
+                    vm.newMessage = ''; // Clear input field after sending message
+                    scrollChatToBottom();
+                }
+            };
+
+            function scrollChatToBottom() {
+                var chatBox = document.getElementById('chatBox');
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
