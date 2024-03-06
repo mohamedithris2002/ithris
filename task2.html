@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html ng-app="imageGalleryApp">
+<head>
+    <title>Interactive Image Gallery</title>
+    <style>
+        /* Gallery layout */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-gap: 10px;
+        }
+        .gallery-item {
+            position: relative;
+            cursor: pointer;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+        }
+        /* Image details overlay */
+        .image-details-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 50%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .image-details-overlay.active {
+            display: flex;
+        }
+        .image-details {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 80%;
+            text-align: center;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="ImageGalleryController as galleryCtrl">
+        <h1>Interactive Image Gallery</h1>
+        <div class="gallery">
+            <div class="gallery-item" ng-repeat="image in galleryCtrl.images" ng-click="galleryCtrl.showImageDetails(image)">
+                <img ng-src="{{ image.url }}" alt="{{ image.alt }}">
+            </div>
+        </div>
+        <!-- Image details overlay -->
+        <div class="image-details-overlay" ng-class="{ 'active': galleryCtrl.selectedImage }">
+            <div class="image-details">
+                <span class="close-button" ng-click="galleryCtrl.hideImageDetails()">X</span>
+                <img ng-src="{{ galleryCtrl.selectedImage.url }}" alt="{{ galleryCtrl.selectedImage.alt }}">
+                <p>{{ galleryCtrl.selectedImage.description }}</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('imageGalleryApp', [])
+        .controller('ImageGalleryController', function() {
+            var vm = this;
+
+            vm.images = [
+                { url: 'https://media.istockphoto.com/id/523761634/photo/cute-panda-bear-climbing-in-tree.jpg?s=612x612&w=0&k=20&c=TxsmORsbuY1LpxQsc6T8fpWJo7lBwncciYhroAr8rXI=', alt: 'Image 1', description: 'Description for Image 1' },
+                { url: 'https://t3.ftcdn.net/jpg/05/55/47/58/360_F_555475895_fsRSDVWKgE4g08yYL5Rn2T5Q0leBmnXc.jpg', alt: 'Image 2', description: 'Description for Image 2' },
+                { url: 'https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/YCH3DQRJOYI6LJPKZ52DS3SZ5Q&w=1440', alt: 'Image 3', description: 'Description for Image 3' },
+                // Add more images as needed
+            ];
+
+            vm.selectedImage = null;
+
+            vm.showImageDetails = function(image) {
+                vm.selectedImage = image;
+            };
+
+            vm.hideImageDetails = function() {
+                vm.selectedImage = null;
+            };
+        });
+    </script>
+</body>
+</html>
