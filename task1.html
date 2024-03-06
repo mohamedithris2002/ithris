@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="taskListApp">
+<head>
+    <title>Task List Manager</title>
+    <style>
+        /* Styling for the task list */
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-item {
+            margin-bottom: 10px;
+        }
+        .task-actions {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="TaskListController as taskListCtrl">
+        <h1>Task List Manager</h1>
+        <input type="text" ng-model="taskName" placeholder="Add a new task">
+        <button ng-click="taskListCtrl.addTask(taskName)">Add Task</button>
+
+        <ul class="task-list">
+            <li class="task-item" ng-repeat="task in taskListCtrl.tasks">
+                <span>{{ task.name }}</span>
+                <span class="task-actions">
+                    <button ng-click="taskListCtrl.editTask(task)">Edit</button>
+                    <button ng-click="taskListCtrl.deleteTask(task)">Delete</button>
+                </span>
+            </li>
+        </ul>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('taskListApp', [])
+        .controller('TaskListController', function() {
+            var vm = this;
+
+            vm.tasks = [];
+
+            vm.addTask = function(taskName) {
+                if (taskName.trim() !== '') {
+                    vm.tasks.push({ name: taskName });
+                    vm.taskName = ''; // Clear input field after adding task
+                }
+            };
+
+            vm.editTask = function(task) {
+                var newName = prompt('Enter new task name:', task.name);
+                if (newName !== null) {
+                    task.name = newName;
+                }
+            };
+
+            vm.deleteTask = function(task) {
+                var index = vm.tasks.indexOf(task);
+                if (index !== -1) {
+                    vm.tasks.splice(index, 1);
+                }
+            };
+        });
+    </script>
+</body>
+</html>
