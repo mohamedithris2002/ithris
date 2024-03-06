@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html ng-app="authApp">
+<head>
+    <title>User Authentication System</title>
+    <style>
+        /* Form styling */
+        form {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="submit"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="AuthController as authCtrl">
+        <h1>User Authentication System</h1>
+        <form ng-submit="authCtrl.signUp()" ng-show="authCtrl.showSignUp">
+            <h2>Sign Up</h2>
+            <div class="error" ng-show="authCtrl.errorMessage">{{ authCtrl.errorMessage }}</div>
+            <input type="text" placeholder="Username" ng-model="authCtrl.username" required>
+            <input type="password" placeholder="Password" ng-model="authCtrl.password" required>
+            <input type="submit" value="Sign Up">
+            <p>Already have an account? <a href="#" ng-click="authCtrl.toggleSignUp()">Log In</a></p>
+        </form>
+        <form ng-submit="authCtrl.logIn()" ng-show="!authCtrl.showSignUp">
+            <h2>Log In</h2>
+            <div class="error" ng-show="authCtrl.errorMessage">{{ authCtrl.errorMessage }}</div>
+            <input type="text" placeholder="Username" ng-model="authCtrl.username" required>
+            <input type="password" placeholder="Password" ng-model="authCtrl.password" required>
+            <input type="submit" value="Log In">
+            <p>Don't have an account? <a href="#" ng-click="authCtrl.toggleSignUp()">Sign Up</a></p>
+        </form>
+        <div ng-show="authCtrl.loggedIn">
+            <h2>Welcome, {{ authCtrl.username }}!</h2>
+            <button ng-click="authCtrl.logOut()">Log Out</button>
+            <!-- Personalized content here -->
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('authApp', [])
+        .controller('AuthController', function() {
+            var vm = this;
+
+            vm.showSignUp = false;
+            vm.loggedIn = false;
+            vm.username = '';
+            vm.password = '';
+            vm.errorMessage = '';
+
+            // Dummy user data (replace with real authentication logic)
+            var users = [
+                { username: 'user1', password: 'password1' },
+                { username: 'user2', password: 'password2' }
+            ];
+
+            vm.toggleSignUp = function() {
+                vm.showSignUp = !vm.showSignUp;
+                vm.errorMessage = '';
+            };
+
+            vm.signUp = function() {
+                // Implement sign-up logic
+                vm.errorMessage = 'Sign-up functionality is not implemented yet.';
+            };
+
+            vm.logIn = function() {
+                // Find user in the users array
+                var user = users.find(function(u) {
+                    return u.username === vm.username && u.password === vm.password;
+                });
+
+                if (user) {
+                    vm.loggedIn = true;
+                    vm.errorMessage = '';
+                } else {
+                    vm.errorMessage = 'Invalid username or password.';
+                }
+            };
+
+            vm.logOut = function() {
+                vm.loggedIn = false;
+                vm.username = '';
+                vm.password = '';
+            };
+        });
+    </script>
+</body>
+</html>
